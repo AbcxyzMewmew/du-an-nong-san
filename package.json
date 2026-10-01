@@ -1,0 +1,30 @@
+{
+  "name": "greenfarm-clean-agriculture",
+  "version": "2.0.0",
+  "description": "GreenFarm - Hệ thống mua bán nông sản sạch trọn vẹn với máy chủ tập trung và CSDL quan hệ",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "db:migrate": "node server/db/migrate.js",
+    "db:seed": "node server/db/seed.js",
+    "test": "node test/system.test.js"
+  },
+  "keywords": [
+    "greenfarm",
+    "clean-agriculture",
+    "nong-san-sach",
+    "vietgap",
+    "ecommerce"
+  ],
+  "author": "GreenFarm Team",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
+  }
+}

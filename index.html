@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenFarm - Hệ Thống Nông Sản Sạch Tự Nhiên</title>
+    <!-- Gắn file CSS để định dạng giao diện -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome Icons hiển thị biểu tượng trực quan -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ============================================== -->
+    <!-- PHẦN 1: HEADER & THANH ĐIỀU HƯỚNG (NAVBAR)     -->
+    <!-- ============================================== -->
+    <header class="header">
+        <div class="container navbar">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-seedling"></i>
+                <div class="logo-text">
+                    <span>GreenFarm</span>
+                    <small>Nông Sản Sạch Tự Nhiên</small>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="#" class="active">Trang chủ</a>
+                <a href="#products">Gian hàng</a>
+                <a href="#lookup" id="nav-link-lookup">Tra cứu đơn</a>
+                <a href="#commitments">Cam kết</a>
+                <a href="#policies">Chính sách</a>
+            </nav>
+
+            <!-- KHU VỰC TÀI KHOẢN VÀ GIỎ HÀNG -->
+            <div class="nav-actions">
+                <!-- Nút tra cứu đơn nhanh -->
+                <button class="btn btn-outline btn-sm" id="btn-open-lookup" title="Tra cứu trạng thái đơn hàng">
+                    <i class="fa-solid fa-magnifying-glass"></i> Tra cứu đơn
+                </button>
+
+                <!-- Nút mở giỏ hàng -->
+                <button class="cart-btn" id="cart-btn" aria-label="Xem giỏ hàng" title="Xem giỏ hàng">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+
+                <!-- 1. Khi CHƯA đăng nhập: Nút Đăng nhập / Đăng ký -->
+                <div id="auth-guest-zone">
+                    <button class="btn btn-primary btn-sm" id="btn-open-login">
+                        <i class="fa-solid fa-user"></i> Tài khoản
+                    </button>
+                </div>
+
+                <!-- 2. Khi ĐÃ đăng nhập: Hiện tên người dùng, vai trò và đăng xuất -->
+                <div id="auth-user-zone" class="hidden">
+                    <div class="user-greeting">
+                        <div class="avatar-circle" id="user-avatar">U</div>
+                        <div class="user-details">
+                            <span class="user-name" id="user-display-name">Người dùng</span>
+                            <span class="role-badge" id="user-role-badge">Khách hàng</span>
+                        </div>
+                    </div>
+
+                    <!-- Nút dành riêng cho Seller (Nhà vườn) -->
+                    <button class="btn btn-seller hidden" id="btn-open-seller" title="Khu vực nhà vườn / người bán">
+                        <i class="fa-solid fa-tractor"></i> Nhà vườn
+                    </button>
+
+                    <!-- Nút quản trị riêng cho Admin -->
+                    <button class="btn btn-admin hidden" id="btn-open-admin" title="Bảng quản trị toàn hệ thống">
+                        <i class="fa-solid fa-user-shield"></i> Quản trị
+                    </button>
+
+                    <!-- Nút Đăng xuất -->
+                    <button class="btn btn-logout" id="btn-logout" title="Đăng xuất tài khoản">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================== -->
+    <!-- PHẦN 2: BANNER GIỚI THIỆU (HERO SECTION)       -->
+    <!-- ============================================== -->
+    <section class="hero">
+        <div class="container hero-content">
+            <span class="hero-tag"><i class="fa-solid fa-shield-heart"></i> Nguồn gốc minh bạch - Tươi mới mỗi ngày</span>
+            <h1>Rau Củ & Hoa Quả Sạch Chuẩn Nông Trại</h1>
+            <p>Tuyển chọn nông sản an toàn từ các hợp tác xã uy tín, thu hoạch sáng sớm và giao nhanh tận bếp gia đình bạn.</p>
+            <div class="hero-actions">
+                <a href="#products" class="btn btn-primary btn-lg"><i class="fa-solid fa-basket-shopping"></i> Khám phá nông sản</a>
+                <a href="#lookup" class="btn btn-white btn-lg" onclick="openLookupModal()"><i class="fa-solid fa-truck-ramp-box"></i> Tra cứu đơn hàng</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PHẦN 3: CAM KẾT CHẤT LƯỢNG (GREEN COMMITMENTS) -->
+    <!-- ============================================== -->
+    <section class="commitments-bar" id="commitments">
+        <div class="container commitments-grid">
+            <div class="commitment-item">
+                <i class="fa-solid fa-carrot"></i>
+                <div>
+                    <h4>100% Nông sản tươi sạch</h4>
+                    <p>Thu hoạch hái sớm, tuyển chọn kỹ lưỡng từng món</p>
+                </div>
+            </div>
+            <div class="commitment-item">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+                <div>
+                    <h4>Giao nhanh trong 2 giờ</h4>
+                    <p>Giữ trọn độ tươi giòn, đóng gói an toàn thực phẩm</p>
+                </div>
+            </div>
+            <div class="commitment-item">
+                <i class="fa-solid fa-rotate-left"></i>
+                <div>
+                    <h4>Đổi trả trong 24 giờ</h4>
+                    <p>Đổi mới hoặc hoàn tiền nếu củ quả dập hỏng</p>
+                </div>
+            </div>
+            <div class="commitment-item">
+                <i class="fa-solid fa-certificate"></i>
+                <div>
+                    <h4>Nguồn gốc minh bạch</h4>
+                    <p>Rõ ràng nhà vườn, quy trình canh tác và kiểm định</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PHẦN 4: DANH MỤC, TÌM KIẾM, LỌC & SẮP XẾP     -->
+    <!-- ============================================== -->
+    <main class="container" id="products">
+        <div class="section-title">
+            <h2>Gian Hàng Nông Sản Tươi Xanh</h2>
+            <p>Tìm kiếm, chọn lọc rau củ quả theo danh mục, tình trạng kho hàng và mức giá</p>
+        </div>
+
+        <!-- THANH CÔNG CỤ TÌM KIẾM, LỌC VÀ SẮP XẾP -->
+        <div class="catalog-toolbar">
+            <!-- Ô tìm kiếm tên sản phẩm -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Tìm theo tên rau, củ, quả, trang trại (ví dụ: bơ, cà chua, cải...)..." autocomplete="off">
+                <button type="button" id="btn-clear-search" class="clear-search-btn hidden" title="Xóa tìm kiếm">&times;</button>
+            </div>
+
+            <!-- Lọc theo tình trạng kho -->
+            <div class="stock-filter-wrapper">
+                <label for="stock-filter"><i class="fa-solid fa-boxes-stacked"></i> Kho:</label>
+                <select id="stock-filter">
+                    <option value="in_stock" selected>Chỉ còn hàng</option>
+                    <option value="all">Tất cả tình trạng</option>
+                    <option value="out_of_stock">Tạm hết hàng</option>
+                </select>
+            </div>
+
+            <!-- Sắp xếp theo giá và tên -->
+            <div class="stock-filter-wrapper">
+                <label for="sort-filter"><i class="fa-solid fa-arrow-down-short-wide"></i> Sắp xếp:</label>
+                <select id="sort-filter">
+                    <option value="latest">Mới nhất</option>
+                    <option value="price_asc">Giá tăng dần</option>
+                    <option value="price_desc">Giá giảm dần</option>
+                    <option value="name_asc">Tên A-Z</option>
+                    <option value="stock_desc">Tồn kho nhiều</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Bộ lọc danh mục (Tabs) -->
+        <div class="category-filter">
+            <button class="filter-btn active" data-category="all">
+                <i class="fa-solid fa-border-all"></i> Tất cả sản phẩm
+            </button>
+            <button class="filter-btn" data-category="Rau xanh">
+                <i class="fa-solid fa-leaf"></i> Rau xanh
+            </button>
+            <button class="filter-btn" data-category="Củ quả">
+                <i class="fa-solid fa-pepper-hot"></i> Củ quả sạch
+            </button>
+            <button class="filter-btn" data-category="Hoa quả">
+                <i class="fa-solid fa-apple-whole"></i> Hoa quả tươi
+            </button>
+        </div>
+
+        <!-- Thông tin số lượng hiển thị -->
+        <div class="catalog-meta">
+            <span id="catalog-count-text">Đang tải dữ liệu từ máy chủ trung tâm...</span>
+        </div>
+
+        <!-- Lưới sản phẩm (Tải động từ Backend API) -->
+        <div class="product-grid" id="product-grid">
+            <!-- Thẻ sản phẩm sẽ được JavaScript render vào đây -->
+        </div>
+    </main>
+
+    <!-- ============================================== -->
+    <!-- PHẦN 5: CHÍNH SÁCH MUA HÀNG & GIAO NHẬN        -->
+    <!-- ============================================== -->
+    <section class="policies-section" id="policies">
+        <div class="container">
+            <div class="section-title">
+                <h2>Chính Sách Mua Hàng & Giao Nhận</h2>
+                <p>GreenFarm đồng hành cùng bữa cơm gia đình với tiêu chuẩn dịch vụ chu đáo</p>
+            </div>
+
+            <div class="policies-grid">
+                <div class="policy-card">
+                    <div class="policy-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                    <h3>Quy Định Giao Hàng</h3>
+                    <ul>
+                        <li><strong>Nội thành:</strong> Giao nhanh trong 2 giờ hoặc theo khung giờ hẹn trước.</li>
+                        <li><strong>Cước phí:</strong> Đồng giá 25.000 đ. <em>Miễn phí giao hàng</em> cho đơn hàng từ <strong>200.000 đ</strong> trở lên.</li>
+                        <li><strong>Bảo quản:</strong> Nông sản được đóng thùng thoáng khí hoặc túi giữ nhiệt để đảm bảo độ tươi ngon.</li>
+                    </ul>
+                </div>
+
+                <div class="policy-card">
+                    <div class="policy-icon"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                    <h3>Chính Sách Đổi Trả 24H</h3>
+                    <ul>
+                        <li>Kiểm tra hàng trực tiếp khi nhận, được quyền từ chối nếu không hài lòng.</li>
+                        <li>Hỗ trợ đổi mới hoặc hoàn tiền 100% trong 24 giờ nếu phát hiện dập úng, hỏng hóc bên trong.</li>
+                        <li>Liên hệ nhanh qua Hotline hoặc Zalo hỗ trợ kèm hình ảnh sản phẩm.</li>
+                    </ul>
+                </div>
+
+                <div class="policy-card">
+                    <div class="policy-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <h3>Minh Bạch Nguồn Gốc</h3>
+                    <ul>
+                        <li>Thông tin xuất xứ trang trại, ngày thu hái được ghi rõ trên từng sản phẩm.</li>
+                        <li>Chỉ ghi nhận chứng nhận (VietGAP/ATTP) khi có hồ sơ công bố hợp lệ.</li>
+                        <li>Cam kết không sử dụng chất kích thích tăng trưởng hoặc hóa chất bảo quản độc hại.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PHẦN 6: CHÂN TRANG (FOOTER)                    -->
+    <!-- ============================================== -->
+    <footer class="footer" id="contact">
+        <div class="container footer-content">
+            <div class="footer-col footer-about">
+                <div class="logo footer-logo">
+                    <i class="fa-solid fa-seedling"></i> GreenFarm
+                </div>
+                <p>Hệ thống cung cấp rau củ quả và nông sản sạch tự nhiên vì sức khỏe người tiêu dùng Việt Nam.</p>
+                <div class="backend-badge-notice">
+                    <i class="fa-solid fa-database"></i>
+                    <small>Hệ thống máy chủ trung tâm: Node.js & CSDL Quan Hệ SQLite (ACID Transacted). Tính toán giá và trừ tồn kho an toàn tuyệt đối trên server.</small>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Hỗ trợ & Tra cứu</h4>
+                <ul class="footer-links">
+                    <li><a href="javascript:void(0)" onclick="openLookupModal()"><i class="fa-solid fa-magnifying-glass"></i> Tra cứu trạng thái đơn hàng</a></li>
+                    <li><a href="#products"><i class="fa-solid fa-leaf"></i> Danh mục rau xanh hữu cơ</a></li>
+                    <li><a href="#products"><i class="fa-solid fa-apple-whole"></i> Hoa quả tươi & Nhập khẩu</a></li>
+                    <li><a href="#policies"><i class="fa-solid fa-truck-fast"></i> Chính sách giao nhận 2H</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Trung tâm hỗ trợ</h4>
+                <p><i class="fa-solid fa-phone"></i> Hotline đặt hàng: <strong>0988-123-456</strong></p>
+                <p><i class="fa-solid fa-envelope"></i> Email: hotro@greenfarm.vn</p>
+                <p><i class="fa-solid fa-clock"></i> Mở cửa: 06:30 - 20:30 hàng ngày</p>
+                <p><i class="fa-solid fa-location-dot"></i> Trụ sở: Số 45 Phố Nông Sản Xanh, TP. Hà Nội</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-inner">
+                <p>&copy; 2026 <strong>GreenFarm</strong> - Bản quyền thuộc về Cửa hàng Nông Sản Sạch GreenFarm.</p>
+                <p class="safe-badge"><i class="fa-solid fa-shield-halved"></i> Hệ thống an toàn - Mật khẩu băm Bcrypt & Ký JWT bảo mật</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 1: CHI TIẾT SẢN PHẨM (PRODUCT DETAILS MODAL)      -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="product-detail-modal">
+        <div class="modal-card modal-lg detail-modal-card">
+            <button class="modal-close-btn" id="btn-close-detail" aria-label="Đóng chi tiết">&times;</button>
+            <div id="product-detail-content">
+                <!-- Nội dung chi tiết do JavaScript điền -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 2: GIỎ HÀNG (SHOPPING CART DRAWER / MODAL)        -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="cart-modal">
+        <div class="modal-card modal-lg cart-modal-card">
+            <div class="cart-modal-header">
+                <h3><i class="fa-solid fa-basket-shopping"></i> Giỏ Hàng Nông Sản Của Bạn</h3>
+                <button class="modal-close-btn" id="btn-close-cart" aria-label="Đóng giỏ hàng">&times;</button>
+            </div>
+
+            <div id="cart-body">
+                <!-- Danh sách sản phẩm trong giỏ hoặc thông báo trống do JavaScript điền -->
+            </div>
+
+            <div class="cart-modal-footer hidden" id="cart-footer">
+                <div class="cart-summary-box">
+                    <div class="summary-line">
+                        <span>Tạm tính tiền hàng:</span>
+                        <strong id="cart-subtotal-price">0 đ</strong>
+                    </div>
+                    <div class="summary-line">
+                        <span>Phí vận chuyển:</span>
+                        <span id="cart-shipping-price">25.000 đ</span>
+                    </div>
+                    <div class="shipping-note" id="shipping-freeship-note">
+                        <i class="fa-solid fa-truck-fast"></i> Mua thêm để được miễn phí vận chuyển cho đơn từ 200.000 đ
+                    </div>
+                    <div class="summary-line total-line">
+                        <span>Tổng thanh toán:</span>
+                        <strong class="total-amount" id="cart-total-price">0 đ</strong>
+                    </div>
+                </div>
+
+                <div class="cart-actions">
+                    <button type="button" class="btn btn-outline" id="btn-continue-shopping">
+                        <i class="fa-solid fa-arrow-left"></i> Tiếp tục chọn nông sản
+                    </button>
+                    <button type="button" class="btn btn-primary btn-checkout" id="btn-open-checkout">
+                        Tiến hành đặt hàng <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 3: BIỂU MẪU ĐẶT HÀNG (CHECKOUT MODAL)            -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="checkout-modal">
+        <div class="modal-card modal-lg checkout-modal-card">
+            <div class="checkout-modal-header">
+                <h3><i class="fa-solid fa-clipboard-list"></i> Đặt Hàng Giao Tận Nơi</h3>
+                <button class="modal-close-btn" id="btn-close-checkout" aria-label="Đóng đặt hàng">&times;</button>
+            </div>
+
+            <form id="form-checkout" novalidate>
+                <div class="checkout-grid">
+                    <!-- Cột 1: Thông tin người nhận -->
+                    <div class="checkout-form-column">
+                        <h4 class="form-column-title"><i class="fa-solid fa-location-dot"></i> Thông tin giao hàng</h4>
+
+                        <div class="form-group">
+                            <label for="order-fullname">Họ và tên người nhận <span class="required">*</span>:</label>
+                            <input type="text" id="order-fullname" placeholder="Ví dụ: Nguyễn Thị Mai" required>
+                            <span class="field-error" id="error-fullname"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-phone">Số điện thoại liên hệ <span class="required">*</span>:</label>
+                            <input type="tel" id="order-phone" placeholder="Ví dụ: 0912345678 (10 số)" required>
+                            <span class="field-error" id="error-phone"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-address">Địa chỉ nhận hàng chi tiết <span class="required">*</span>:</label>
+                            <input type="text" id="order-address" placeholder="Số nhà, ngõ/đường, phường/xã, quận/huyện..." required>
+                            <span class="field-error" id="error-address"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-note">Ghi chú giao hàng (tùy chọn):</label>
+                            <textarea id="order-note" rows="2" placeholder="Ví dụ: Giao sau 17h, gọi trước khi đến 10 phút..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phương thức thanh toán:</label>
+                            <div class="payment-options">
+                                <label class="payment-radio">
+                                    <input type="radio" name="payment-method" value="COD" checked>
+                                    <span><i class="fa-solid fa-money-bill-wave"></i> Thanh toán tiền mặt khi nhận hàng (COD)</span>
+                                </label>
+                                <label class="payment-radio">
+                                    <input type="radio" name="payment-method" value="SANDBOX_PAYMENT">
+                                    <span><i class="fa-solid fa-credit-card"></i> Cổng thanh toán Sandbox (Thử nghiệm ký số bảo mật)</span>
+                                </label>
+                                <label class="payment-radio">
+                                    <input type="radio" name="payment-method" value="VIETQR">
+                                    <span><i class="fa-solid fa-qrcode"></i> Chuyển khoản VietQR ngân hàng (Mô phỏng)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cột 2: Tóm tắt đơn hàng -->
+                    <div class="checkout-summary-column">
+                        <h4 class="form-column-title"><i class="fa-solid fa-receipt"></i> Tóm tắt đơn hàng</h4>
+                        <div class="checkout-items-preview" id="checkout-items-preview">
+                            <!-- Danh sách sản phẩm tóm tắt -->
+                        </div>
+
+                        <div class="checkout-calc-box">
+                            <div class="summary-line">
+                                <span>Tiền nông sản:</span>
+                                <span id="checkout-subtotal">0 đ</span>
+                            </div>
+                            <div class="summary-line">
+                                <span>Phí vận chuyển:</span>
+                                <span id="checkout-shipping">25.000 đ</span>
+                            </div>
+                            <div class="summary-line total-line">
+                                <span>Tổng cộng:</span>
+                                <strong class="total-amount" id="checkout-total">0 đ</strong>
+                            </div>
+                        </div>
+
+                        <div class="checkout-actions">
+                            <button type="button" class="btn btn-outline" id="btn-back-to-cart">
+                                <i class="fa-solid fa-arrow-left"></i> Sửa giỏ hàng
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-confirm-order">
+                                <i class="fa-solid fa-check"></i> Xác nhận đặt hàng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 4: XÁC NHẬN ĐƠN HÀNG THÀNH CÔNG                  -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="order-success-modal">
+        <div class="modal-card modal-lg order-success-card">
+            <div class="success-header">
+                <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <h2>Đặt Hàng Thành Công!</h2>
+                <p>Cảm ơn quý khách đã tin chọn rau củ quả sạch tại <strong>GreenFarm</strong></p>
+                <div class="order-code-badge" id="success-order-id">Mã đơn: GF-000000</div>
+            </div>
+
+            <div class="order-success-details" id="order-success-content">
+                <!-- Nội dung tóm tắt đơn do JavaScript điền -->
+            </div>
+
+            <div class="order-success-actions" id="order-success-buttons">
+                <!-- Nút thao tác tiếp theo do JavaScript điền (Thanh toán Sandbox, Xem QR hoặc Tiếp tục mua) -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 5: TRA CỨU ĐƠN HÀNG (ORDER LOOKUP MODAL)          -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="lookup-modal">
+        <div class="modal-card modal-lg lookup-modal-card">
+            <div class="cart-modal-header">
+                <h3><i class="fa-solid fa-truck-fast"></i> Tra Cứu Trạng Thái Đơn Hàng</h3>
+                <button class="modal-close-btn" id="btn-close-lookup" aria-label="Đóng tra cứu">&times;</button>
+            </div>
+
+            <form id="form-lookup" class="lookup-search-form">
+                <div class="lookup-input-group">
+                    <input type="text" id="lookup-input" placeholder="Nhập Mã đơn hàng (ví dụ: GF-202610-1234) hoặc Số điện thoại..." required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-magnifying-glass"></i> Tra cứu ngay
+                    </button>
+                </div>
+            </form>
+
+            <div id="lookup-results" class="lookup-results-box">
+                <p class="lookup-hint"><i class="fa-solid fa-circle-info"></i> Quý khách có thể nhập mã đơn hàng nhận được sau khi đặt hoặc số điện thoại người nhận để kiểm tra trạng thái đóng gói, vận chuyển và thanh toán.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 6: THANH TOÁN SANDBOX (SANDBOX PAYMENT MODAL)     -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="sandbox-modal">
+        <div class="modal-card sandbox-modal-card">
+            <div class="cart-modal-header">
+                <h3><i class="fa-solid fa-credit-card"></i> Cổng Thanh Toán Sandbox Thử Nghiệm</h3>
+                <button class="modal-close-btn" id="btn-close-sandbox" aria-label="Đóng">&times;</button>
+            </div>
+
+            <div class="sandbox-content">
+                <div class="sandbox-badge"><i class="fa-solid fa-flask"></i> Môi trường Sandbox Test</div>
+                <div class="sandbox-order-info" id="sandbox-info-box">
+                    <!-- Dữ liệu phiên thanh toán -->
+                </div>
+                <div class="sandbox-security-box">
+                    <p><i class="fa-solid fa-shield-check"></i> Chữ ký số <strong>HMAC-SHA256</strong> được tạo và xác minh an toàn phía máy chủ. Webhook được bảo vệ chống trùng lặp (Idempotent).</p>
+                </div>
+                <div class="sandbox-actions">
+                    <button type="button" class="btn btn-primary btn-block" id="btn-confirm-sandbox-pay">
+                        <i class="fa-solid fa-circle-check"></i> Giả lập thanh toán thành công (Kích hoạt Webhook)
+                    </button>
+                    <button type="button" class="btn btn-outline btn-block" id="btn-cancel-sandbox">Hủy thanh toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 7: KHU VỰC NGƯỜI BÁN / NHÀ VƯỜN (SELLER ZONE)     -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="seller-modal">
+        <div class="modal-card modal-lg seller-modal-card">
+            <div class="cart-modal-header">
+                <h3><i class="fa-solid fa-tractor"></i> Khu Vực Nhà Vườn & Người Bán (Seller Zone)</h3>
+                <button class="modal-close-btn" id="btn-close-seller" aria-label="Đóng">&times;</button>
+            </div>
+
+            <div class="seller-tabs">
+                <button class="tab-btn active" id="tab-seller-products-btn">Nông sản của vườn</button>
+                <button class="tab-btn" id="tab-seller-add-btn">Đăng bán sản phẩm mới</button>
+                <button class="tab-btn" id="tab-seller-orders-btn">Đơn hàng cần giao</button>
+            </div>
+
+            <!-- Tab 1: Danh sách sản phẩm của nhà vườn -->
+            <div class="tab-panel active" id="seller-panel-products">
+                <div class="seller-toolbar">
+                    <span id="seller-product-count">Đang tải danh sách nông sản...</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="seller-products-table">
+                        <thead>
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Tên nông sản</th>
+                                <th>Danh mục</th>
+                                <th>Giá bán</th>
+                                <th>Tồn kho</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seller-products-tbody">
+                            <!-- Nội dung sản phẩm do JS tải -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 2: Thêm nông sản mới -->
+            <div class="tab-panel hidden" id="seller-panel-add">
+                <form id="form-seller-add-product">
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="sp-name">Tên sản phẩm (*):</label>
+                            <input type="text" id="sp-name" placeholder="Ví dụ: Bông Cải Xanh Đà Lạt..." required>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="sp-category">Danh mục (*):</label>
+                            <select id="sp-category" required>
+                                <option value="1">Rau xanh</option>
+                                <option value="2">Củ quả</option>
+                                <option value="3">Hoa quả</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-4">
+                            <label for="sp-price">Giá bán (VNĐ) (*):</label>
+                            <input type="number" id="sp-price" min="1000" step="1000" placeholder="35000" required>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="sp-stock">Số lượng tồn kho (*):</label>
+                            <input type="number" id="sp-stock" min="0" placeholder="20" required>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="sp-unit">Đơn vị bán (*):</label>
+                            <input type="text" id="sp-unit" placeholder="Kg, Hộp, Cây..." value="Kg" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="sp-origin">Nguồn gốc / Nhà vườn:</label>
+                            <input type="text" id="sp-origin" placeholder="Ví dụ: HTX Nông nghiệp Đơn Dương, Lâm Đồng">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="sp-certification">Chứng nhận / Kiểm định:</label>
+                            <input type="text" id="sp-certification" placeholder="Ví dụ: Đạt chuẩn VietGAP / Kiểm định ATTP">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sp-cultivation">Quy trình sản xuất / Canh tác:</label>
+                        <input type="text" id="sp-cultivation" placeholder="Ví dụ: Canh tác nhà màng, tưới nhỏ giọt công nghệ Israel...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sp-image">Đường dẫn ảnh sản phẩm (URL tùy chọn):</label>
+                        <input type="url" id="sp-image" placeholder="https://images.unsplash.com/photo-...">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-plus"></i> Đăng Bán Lên Cửa Hàng
+                    </button>
+                </form>
+            </div>
+
+            <!-- Tab 3: Đơn hàng cần giao -->
+            <div class="tab-panel hidden" id="seller-panel-orders">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Người nhận</th>
+                                <th>Số điện thoại</th>
+                                <th>Món của vườn</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seller-orders-tbody">
+                            <!-- Danh sách đơn do JS tải -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 8: KHU VỰC QUẢN TRỊ VIÊN HỆ THỐNG (ADMIN ZONE)     -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="admin-modal">
+        <div class="modal-card modal-lg admin-modal-card">
+            <div class="cart-modal-header">
+                <h3><i class="fa-solid fa-user-shield"></i> Bảng Quản Trị Hệ Thống GreenFarm (Admin)</h3>
+                <button class="modal-close-btn" id="btn-close-admin" aria-label="Đóng">&times;</button>
+            </div>
+
+            <div class="seller-tabs">
+                <button class="tab-btn active" id="tab-admin-overview-btn">Tổng quan thống kê</button>
+                <button class="tab-btn" id="tab-admin-orders-btn">Quản lý đơn hàng</button>
+                <button class="tab-btn" id="tab-admin-users-btn">Quản lý tài khoản</button>
+                <button class="tab-btn" id="tab-admin-farms-btn">Trang trại đối tác</button>
+            </div>
+
+            <!-- Tab 1: Tổng quan thống kê -->
+            <div class="tab-panel active" id="admin-panel-overview">
+                <div class="admin-stats-grid" id="admin-stats-box">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Doanh thu đã thu</span>
+                            <strong class="stat-val" id="stat-revenue">0 đ</strong>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-receipt"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Tổng đơn hàng</span>
+                            <strong class="stat-val" id="stat-orders">0</strong>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Thành viên hệ thống</span>
+                            <strong class="stat-val" id="stat-users">0</strong>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-leaf"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Nông sản đang bán</span>
+                            <strong class="stat-val" id="stat-products">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Quản lý đơn hàng -->
+            <div class="tab-panel hidden" id="admin-panel-orders">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Thanh toán</th>
+                                <th>Đơn hàng</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-tbody">
+                            <!-- Đơn hàng admin -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 3: Quản lý tài khoản -->
+            <div class="tab-panel hidden" id="admin-panel-users">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên đăng nhập</th>
+                                <th>Họ và tên</th>
+                                <th>Số điện thoại</th>
+                                <th>Vai trò</th>
+                                <th>Đổi vai trò</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-tbody">
+                            <!-- Danh sách tài khoản admin -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 4: Trang trại đối tác -->
+            <div class="tab-panel hidden" id="admin-panel-farms">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tên trang trại</th>
+                                <th>Vị trí</th>
+                                <th>Chủ tài khoản</th>
+                                <th>Chứng nhận</th>
+                                <th>Số sản phẩm</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-farms-tbody">
+                            <!-- Danh sách trang trại -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL 9: ĐĂNG NHẬP / ĐĂNG KÝ (SIGN IN & SIGN UP)        -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay hidden" id="auth-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="btn-close-auth" aria-label="Đóng">&times;</button>
+            
+            <div class="modal-tabs">
+                <button class="tab-btn active" id="tab-login-btn">Đăng Nhập</button>
+                <button class="tab-btn" id="tab-register-btn">Đăng Ký</button>
+            </div>
+
+            <!-- TAB 1: FORM ĐĂNG NHẬP -->
+            <div class="tab-panel active" id="login-panel">
+                <form id="form-login">
+                    <div class="form-group">
+                        <label for="login-username"><i class="fa-solid fa-user"></i> Tên đăng nhập:</label>
+                        <input type="text" id="login-username" placeholder="Nhập tên tài khoản..." required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password"><i class="fa-solid fa-lock"></i> Mật khẩu:</label>
+                        <input type="password" id="login-password" placeholder="Nhập mật khẩu..." required autocomplete="current-password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Đăng Nhập</button>
+
+                    <div class="auth-demo-hint">
+                        <p><i class="fa-solid fa-circle-info"></i> Tài khoản mẫu thử nghiệm trong cơ sở dữ liệu:</p>
+                        <ul style="font-size: 11.5px; margin-top: 4px; line-height: 1.5;">
+                            <li>👑 <strong>Quản trị viên:</strong> <code>admin</code> (Mật khẩu: <code>admin123</code>)</li>
+                            <li>🚜 <strong>Nhà vườn / Người bán:</strong> <code>farmer_donduong</code> (Mật khẩu: <code>seller123</code>)</li>
+                            <li>👤 <strong>Khách hàng:</strong> <code>khachhang</code> (Mật khẩu: <code>user123</code>)</li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TAB 2: FORM ĐĂNG KÝ -->
+            <div class="tab-panel hidden" id="register-panel">
+                <form id="form-register">
+                    <div class="form-group">
+                        <label for="reg-fullname"><i class="fa-solid fa-id-card"></i> Họ và tên:</label>
+                        <input type="text" id="reg-fullname" placeholder="Ví dụ: Hoàng Văn An" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-username"><i class="fa-solid fa-user"></i> Tên đăng nhập:</label>
+                        <input type="text" id="reg-username" placeholder="Viết liền không dấu..." required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-role"><i class="fa-solid fa-user-tag"></i> Đăng ký với vai trò:</label>
+                        <select id="reg-role">
+                            <option value="customer" selected>👤 Khách hàng mua nông sản</option>
+                            <option value="seller">🚜 Nhà vườn / Người bán nông sản</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-password"><i class="fa-solid fa-lock"></i> Mật khẩu:</label>
+                        <input type="password" id="reg-password" placeholder="Tối thiểu 6 ký tự..." required autocomplete="new-password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-confirm-password"><i class="fa-solid fa-circle-check"></i> Xác nhận mật khẩu:</label>
+                        <input type="password" id="reg-confirm-password" placeholder="Nhập lại mật khẩu..." required autocomplete="new-password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Tạo Tài Khoản</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- KHUNG THÔNG BÁO NHANH (TOAST NOTIFICATION) -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ============================================== -->
+    <!-- GẮN FILE JAVASCRIPT XỬ LÝ TOÀN BỘ WEBSITE     -->
+    <!-- ============================================== -->
+    <script src="app.js"></script>
+
+</body>
+</html>
